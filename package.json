@@ -1,0 +1,25 @@
+{
+  "name": "itinerary-plotter-api",
+  "version": "0.1.0",
+  "description": "Itinerary Plotter",
+  "scripts": {
+    "start": "tsc && tsx watch ./src/server.ts",
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sean Lagudas",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "knex": "^3.1.0",
+    "prisma": "^6.15.0",
+    "prisma-kysely": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
