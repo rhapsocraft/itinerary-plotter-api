@@ -2,11 +2,13 @@ import express from 'express';
 import { routers } from './modules';
 import { env } from '@/config/environment';
 import { sessionMiddleware } from './middlewares/session.middleware';
+import { passportMiddleWare } from './middlewares/passport.middleware';
 
 const app = express();
 const port = env.SERVER_PORT;
 
 app.use(sessionMiddleware());
+app.use(passportMiddleWare());
 
 app.use(routers);
 

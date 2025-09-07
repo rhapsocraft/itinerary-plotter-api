@@ -22,3 +22,23 @@ generator kysely {
   output   = "../src/db"
   fileName = "types.d.ts"
 }
+
+model NativeUser {
+  id            String          @id @db.VarChar(36) // UUID Length
+  displayName   String
+  GoogleAccount GoogleAccount[]
+  createdAt     DateTime        @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime        @db.Timestamptz(3)
+
+  @@map("users")
+}
+
+model GoogleAccount {
+  id        String     @id @db.VarChar(21) // Google Id Length
+  userId    String     @db.VarChar(36)
+  user      NativeUser @relation(fields: [userId], references: [id])
+  createdAt DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime   @db.Timestamptz(3)
+
+  @@map("google_accounts")
+}

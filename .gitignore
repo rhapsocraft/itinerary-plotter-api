@@ -1,8 +1,15 @@
+# Dependecy Directories
 node_modules
+
+# Build Artifacts
 dist
 
+# Environment Config Files
 .env
 .env.*
 
+# Generated Files
 generated
 
+# Temporary storage
+temporary

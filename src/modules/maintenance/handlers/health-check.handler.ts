@@ -5,6 +5,7 @@ enum HealthCheckStatus {
 }
 
 type HealthCheckResponse = {
+  user: string | undefined;
   status: HealthCheckStatus;
   serverTime: {
     utcTime: string;
@@ -16,6 +17,7 @@ export const healthCheckHandler: RequestHandler<any, HealthCheckResponse, any, a
   const now = new Date();
 
   res.send({
+    user: req.isAuthenticated() ? JSON.stringify(req.user) : undefined,
     status: HealthCheckStatus.OK,
     serverTime: {
       utcTime: now.toUTCString(),
