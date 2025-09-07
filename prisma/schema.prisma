@@ -29,6 +29,8 @@ model NativeUser {
   GoogleAccount GoogleAccount[]
   createdAt     DateTime        @default(now()) @db.Timestamptz(3)
   updatedAt     DateTime        @db.Timestamptz(3)
+  Trip          Trip[]
+  File          File[]
 
   @@map("users")
 }
@@ -43,4 +45,57 @@ model GoogleAccount {
   updatedAt   DateTime   @db.Timestamptz(3)
 
   @@map("google_accounts")
+}
+
+model Trip {
+  id          String     @id @db.VarChar(36)
+  displayName String
+  ownerId     String     @db.VarChar(36)
+  owner       NativeUser @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime   @db.Timestamptz(3)
+
+  @@map("trips")
+}
+
+model Activity {
+  id          String   @id @db.VarChar(36)
+  displayName String
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @db.Timestamptz(3)
+
+  @@map("activities")
+}
+
+model Document {
+  id                     String                   @id @db.VarChar(36)
+  content                String
+  createdAt              DateTime                 @default(now()) @db.Timestamptz(3)
+  updatedAt              DateTime                 @db.Timestamptz(3)
+  DocumentFileReferences DocumentFileReferences[]
+
+  @@map("documents")
+}
+
+model DocumentFileReferences {
+  documentId String   @db.VarChar(36)
+  document   Document @relation(fields: [documentId], references: [id])
+  fileId     String   @db.VarChar(36)
+  file       File     @relation(fields: [fileId], references: [id])
+
+  @@id([documentId, fileId])
+  @@map("document_file_ref")
+}
+
+model File {
+  id                     String                   @id @db.VarChar(36)
+  data                   String
+  type                   String
+  uploaderId             String                   @db.VarChar(36)
+  uploader               NativeUser               @relation(fields: [uploaderId], references: [id])
+  createdAt              DateTime                 @default(now()) @db.Timestamptz(3)
+  updatedAt              DateTime                 @db.Timestamptz(3)
+  DocumentFileReferences DocumentFileReferences[]
+
+  @@map("files")
 }
