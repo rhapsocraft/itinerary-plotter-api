@@ -1,9 +1,9 @@
 import { asyncHandler } from '@/utils/async-handler.util';
-import express, { Router } from 'express';
+import { Router } from 'express';
 import passport from 'passport';
 import { logoutHandler } from './handlers/logout.handler';
 
-const router: Router = express.Router();
+const router: Router = Router();
 
 // Google Authentication Route
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
