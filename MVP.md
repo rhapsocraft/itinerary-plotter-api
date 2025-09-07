@@ -6,17 +6,13 @@
 - implement user Identity tied to Google account
 
 - [ ] Diagrams
-  - [ ] ERD
-  - [ ] User Flow
-
-- [ ] Implement Data Structures
-  - [ ] Trip
-
-- [ ] Google Maps Integration
-
-- [ ] Google Calendar API
+  - [x] ERD
+  - [ ] User
+- [ ] Implement Entities
 
 ## MVP 2 - User Interface
 
+- [ ] Google Maps Integration
+- [ ] Google Calendar API
 - [ ] Setup frontend web app (React Native)
 - [ ] App Prototype/Mockup
