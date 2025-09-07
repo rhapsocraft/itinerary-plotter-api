@@ -35,6 +35,7 @@ model NativeUser {
 
 model GoogleAccount {
   id        String     @id @db.VarChar(21) // Google Id Length
+  email     String     @unique
   userId    String     @db.VarChar(36)
   user      NativeUser @relation(fields: [userId], references: [id])
   createdAt DateTime   @default(now()) @db.Timestamptz(3)
