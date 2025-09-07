@@ -66,7 +66,8 @@ erDiagram
 	TRIP_VISIBILITY {
 	}
 	ACTIVITY {
-		int seq  ""
+		datetime scheduleStart
+		datetime scheduleEnd
 	}
 
 	USER||--o{TRIP:"owns"
