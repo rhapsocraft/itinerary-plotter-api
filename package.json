@@ -7,7 +7,8 @@
     "dev": "tsx watch ./src/server.ts",
     "build": "tsc",
     "prettier": "prettier --write \"src/**/*.{js,ts,json,css,scss,md}\"",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:dev": "prisma migrate dev"
   },
   "author": "Sean Lagudas",
   "license": "ISC",
@@ -17,8 +18,10 @@
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "knex": "^3.1.0",
+    "kysely": "^0.28.5",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
+    "pg": "^8.16.3",
     "prisma": "^6.15.0",
     "prisma-kysely": "^2.2.0",
     "uuid": "^12.0.0",
@@ -29,6 +32,7 @@
     "@types/express-session": "^1.18.2",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
+    "@types/pg": "^8.15.5",
     "prettier": "^3.6.2",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"

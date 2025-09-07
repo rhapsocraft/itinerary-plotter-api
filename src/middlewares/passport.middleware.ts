@@ -1,7 +1,9 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategry } from 'passport-google-oauth20';
 import { env } from '@/config/environment';
-import { RequestHandler, Express } from 'express';
+import { RequestHandler } from 'express';
+import { registerGoogleUserUseCase } from '@/modules/auth/use-cases/register-google-user.use-case';
+import { findById as findGoogleAccountById } from '@/modules/user/services/google-account.service';
 
 // Initialize Google Auth passport strategy
 passport.use(
@@ -11,10 +13,14 @@ passport.use(
       clientSecret: env.GOOGLE_CLIENT_SECRET,
       callbackURL: env.GOOGLE_AUTH_CALLBACK_URL,
     },
-    function (accessToken, refreshToken, profile, cb) {
+    async function (accessToken, refreshToken, profile, cb) {
       // Here we can create user
 
-      console.log('GOOGLE AUTH: ', JSON.stringify(profile));
+      const existingAccount = await findGoogleAccountById(profile.id);
+
+      if (!existingAccount) {
+        await registerGoogleUserUseCase(profile);
+      }
 
       return cb(null, profile);
     },
