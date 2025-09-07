@@ -1,7 +1,9 @@
 import { z } from 'zod';
 import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config({
+  quiet: true,
+});
 
 function isProduction() {
   return process.env.NODE_ENV === 'production';
