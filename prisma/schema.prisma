@@ -48,21 +48,23 @@ model GoogleAccount {
 }
 
 model Trip {
-  id          String     @id @db.VarChar(36)
-  displayName String
-  ownerId     String     @db.VarChar(36)
-  owner       NativeUser @relation(fields: [ownerId], references: [id])
-  createdAt   DateTime   @default(now()) @db.Timestamptz(3)
-  updatedAt   DateTime   @db.Timestamptz(3)
+  id            String          @id @db.VarChar(36)
+  displayName   String
+  ownerId       String          @db.VarChar(36)
+  owner         NativeUser      @relation(fields: [ownerId], references: [id])
+  createdAt     DateTime        @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime        @db.Timestamptz(3)
+  TripDocuments TripDocuments[]
 
   @@map("trips")
 }
 
 model Activity {
-  id          String   @id @db.VarChar(36)
-  displayName String
-  createdAt   DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt   DateTime @db.Timestamptz(3)
+  id                String              @id @db.VarChar(36)
+  displayName       String
+  createdAt         DateTime            @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime            @db.Timestamptz(3)
+  ActivityDocuments ActivityDocuments[]
 
   @@map("activities")
 }
@@ -73,8 +75,32 @@ model Document {
   createdAt              DateTime                 @default(now()) @db.Timestamptz(3)
   updatedAt              DateTime                 @db.Timestamptz(3)
   DocumentFileReferences DocumentFileReferences[]
+  TripDocuments          TripDocuments[]
+  ActivityDocuments      ActivityDocuments[]
 
   @@map("documents")
+}
+
+model ActivityDocuments {
+  documentId String @db.VarChar(36)
+  activityId String @db.VarChar(36)
+
+  trip     Activity @relation(fields: [activityId], references: [id])
+  document Document @relation(fields: [documentId], references: [id])
+
+  @@id([documentId, activityId])
+  @@map("activity_documents")
+}
+
+model TripDocuments {
+  documentId String @db.VarChar(36)
+  tripId     String @db.VarChar(36)
+
+  trip     Trip     @relation(fields: [tripId], references: [id])
+  document Document @relation(fields: [documentId], references: [id])
+
+  @@id([documentId, tripId])
+  @@map("trip_documents")
 }
 
 model DocumentFileReferences {
