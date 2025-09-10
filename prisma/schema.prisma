@@ -37,7 +37,7 @@ model NativeUser {
 
 model GoogleAccount {
   id          String     @id @db.VarChar(21) // Google Id Length
-  displayName String
+  displayName String     @default("")
   email       String     @unique
   userId      String     @db.VarChar(36)
   user        NativeUser @relation(fields: [userId], references: [id])
