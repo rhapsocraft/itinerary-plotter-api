@@ -40,7 +40,7 @@ export async function findById(id: string) {
   const trip = await db.selectFrom('trips').selectAll().where('id', '=', id).executeTakeFirst();
 
   if (!trip) {
-    return new Error(`Trip ${id} not found`);
+    throw new Error(`Trip ${id} not found`);
   }
 
   return trip;
