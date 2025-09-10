@@ -16,13 +16,13 @@ passport.use(
     async function (accessToken, refreshToken, profile, cb) {
       // Here we can create user
 
-      const existingAccount = await findGoogleAccountById(profile.id);
+      let existingAccount = await findGoogleAccountById(profile.id);
 
       if (!existingAccount) {
-        await registerGoogleUserUseCase(profile);
+        existingAccount = await registerGoogleUserUseCase(profile);
       }
 
-      return cb(null, profile);
+      return cb(null, existingAccount);
     },
   ),
 );

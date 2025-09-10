@@ -18,7 +18,7 @@ export async function registerGoogleUserUseCase(googleProfile: Profile) {
     _json: { email },
   } = profileSchema.parse(googleProfile);
 
-  await db.transaction().execute(async (trx) => {
+  return await db.transaction().execute(async (trx) => {
     const updatedAt = new Date();
 
     const user = await trx
