@@ -4,15 +4,14 @@ import { create } from '../services/trip.service';
 import { Selectable } from 'kysely';
 
 type CreateTripRequest = {
-  tripName: string;
+  displayName: string;
 };
 
-type CreateTripResponse = {
-  trip: Selectable<Trip>;
-};
+type CreateTripResponse = Selectable<Trip>;
 
 export const createTripHandler: RequestHandler<any, CreateTripResponse, CreateTripRequest, any> = async (req, res) => {
-  const createdTrip = await create({ displayName: req.body?.tripName, ownerId: req.user.userId });
+  const { displayName } = req.body;
+  const createdTrip = await create({ displayName, ownerId: req.user.userId });
 
   res.status(201).send(createdTrip);
 };

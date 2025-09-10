@@ -15,7 +15,7 @@ const { dto: createTripDTO, validator: validateCreateTripDTO } = createDTO(
 
 export type CreateTripDTO = typeof createTripDTO;
 
-export async function create(tripDTO: CreateTripDTO): Promise<{ trip: Selectable<Trip> }> {
+export async function create(tripDTO: CreateTripDTO): Promise<Selectable<Trip>> {
   const { displayName, ownerId } = await validateCreateTripDTO(tripDTO);
 
   const trip = await db
@@ -33,11 +33,50 @@ export async function create(tripDTO: CreateTripDTO): Promise<{ trip: Selectable
     throw new Error('Failed to create Trip');
   }
 
-  return { trip };
+  return trip;
 }
 
 export async function findById(id: string) {
   const trip = await db.selectFrom('trips').selectAll().where('id', '=', id).executeTakeFirst();
+
+  if (!trip) {
+    throw new Error(`Trip ${id} not found`);
+  }
+
+  return trip;
+}
+
+export async function deleteById(id: string) {
+  const trip = await db.deleteFrom('trips').where('id', '=', id).returningAll().executeTakeFirst();
+
+  if (!trip) {
+    throw new Error(`Trip ${id} not found`);
+  }
+
+  return trip;
+}
+
+const { dto: editTripDTO, validator: validateEditTripDTO } = createDTO(
+  z.object({
+    displayName: TripSchema.shape.displayName.optional(),
+    ownerId: TripSchema.shape.ownerId.optional(),
+  }),
+);
+
+export type EditTripDTO = typeof editTripDTO;
+
+export async function editById(id: string, editDto: EditTripDTO) {
+  const { displayName, ownerId } = await validateEditTripDTO(editDto);
+
+  const trip = await db
+    .updateTable('trips')
+    .where('id', '=', id)
+    .set({
+      displayName,
+      ownerId,
+    })
+    .returningAll()
+    .executeTakeFirst();
 
   if (!trip) {
     throw new Error(`Trip ${id} not found`);

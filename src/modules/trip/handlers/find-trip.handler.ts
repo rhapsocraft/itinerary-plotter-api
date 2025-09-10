@@ -19,7 +19,7 @@ export const findTripsHandler: RequestHandler<any, FindTripsResponse, FindTripsR
   res.status(200).send(trips);
 };
 
-export const findTripById: RequestHandler<{ id: string }, FindTripByIdResponse, any, any> = async (req, res) => {
+export const findTripByIdHandler: RequestHandler<{ id: string }, FindTripByIdResponse, any, any> = async (req, res) => {
   const trip = await findById(req.params.id);
 
   res.status(200).send(trip);
