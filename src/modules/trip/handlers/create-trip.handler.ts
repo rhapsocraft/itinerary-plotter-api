@@ -12,7 +12,6 @@ type CreateTripResponse = {
 };
 
 export const createTripHandler: RequestHandler<any, CreateTripResponse, CreateTripRequest, any> = async (req, res) => {
-  console.log(req.body);
   const createdTrip = await create({ displayName: req.body?.tripName, ownerId: req.user.userId });
 
   res.status(201).send(createdTrip);
