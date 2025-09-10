@@ -4,9 +4,11 @@ import { env } from '@/config/environment';
 import { sessionMiddleware } from './middlewares/session.middleware';
 import { passportMiddleWare } from './middlewares/passport.middleware';
 
-const app = express();
 const port = env.SERVER_PORT;
 
+const app = express();
+
+app.use(express.json());
 app.use(sessionMiddleware());
 app.use(passportMiddleWare());
 

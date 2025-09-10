@@ -1,14 +1,19 @@
-import { NativeUser, Trip } from '@/db/types';
+import { Trip } from '@/db/types';
 import { RequestHandler } from 'express';
+import { create } from '../services/trip.service';
+import { Selectable } from 'kysely';
 
 type CreateTripRequest = {
   tripName: string;
 };
 
 type CreateTripResponse = {
-  trip: Trip;
+  trip: Selectable<Trip>;
 };
 
-export const createTripHandler: RequestHandler<any, CreateTripResponse, CreateTripRequest, any> = (req, res) => {
-  const user = req.user;
+export const createTripHandler: RequestHandler<any, CreateTripResponse, CreateTripRequest, any> = async (req, res) => {
+  console.log(req.body);
+  const createdTrip = await create({ displayName: req.body?.tripName, ownerId: req.user.userId });
+
+  res.status(201).send(createdTrip);
 };
