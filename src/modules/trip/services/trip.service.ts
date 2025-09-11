@@ -1,10 +1,10 @@
 import { db } from '@/db';
-import { TripSchema } from '@/db/schema';
 import z from 'zod';
 import { v4 as uuidv4 } from 'uuid';
 import { createDTO } from '@/utils/create-dto.util';
 import { Trip } from '@/db/types';
 import { Expression, Selectable, SqlBool } from 'kysely';
+import { TripSchema } from '@/db/generated/zod';
 
 const { dto: createTripDTO, validator: validateCreateTripDTO } = createDTO(
   z.object({

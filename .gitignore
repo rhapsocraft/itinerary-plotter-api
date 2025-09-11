@@ -10,6 +10,10 @@ dist
 
 # Generated Files
 generated
+.prisma-zod-generator-manifest.json
 
 # Temporary storage
 temporary
+
+# Uploads directory
+uploads

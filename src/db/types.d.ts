@@ -6,15 +6,15 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export type Activity = {
     id: string;
-    displayName: string;
+    displayName: Generated<string>;
     createdAt: Generated<Timestamp>;
-    updatedAt: Timestamp;
+    updatedAt: Generated<Timestamp>;
 };
 export type Document = {
     id: string;
     content: string;
     createdAt: Generated<Timestamp>;
-    updatedAt: Timestamp;
+    updatedAt: Generated<Timestamp>;
 };
 export type DocumentFileReferences = {
     documentId: string;
@@ -22,32 +22,41 @@ export type DocumentFileReferences = {
 };
 export type File = {
     id: string;
-    data: string;
+    name: string;
+    displayName: string;
+    encoding: string;
+    src: string;
     type: string;
+    size: number;
     uploaderId: string;
     createdAt: Generated<Timestamp>;
-    updatedAt: Timestamp;
+    updatedAt: Generated<Timestamp>;
 };
 export type GoogleAccount = {
     id: string;
-    displayName: Generated<string>;
     email: string;
     userId: string;
     createdAt: Generated<Timestamp>;
-    updatedAt: Timestamp;
+    updatedAt: Generated<Timestamp>;
+    displayName: Generated<string>;
 };
 export type NativeUser = {
     id: string;
     displayName: string;
     createdAt: Generated<Timestamp>;
-    updatedAt: Timestamp;
+    updatedAt: Generated<Timestamp>;
 };
 export type Trip = {
     id: string;
-    displayName: string;
+    displayName: Generated<string>;
     ownerId: string;
     createdAt: Generated<Timestamp>;
-    updatedAt: Timestamp;
+    updatedAt: Generated<Timestamp>;
+};
+export type user_sessions = {
+    sid: string;
+    sess: unknown;
+    expire: Timestamp;
 };
 export type DB = {
     activities: Activity;
@@ -56,5 +65,6 @@ export type DB = {
     files: File;
     google_accounts: GoogleAccount;
     trips: Trip;
+    user_sessions: user_sessions;
     users: NativeUser;
 };

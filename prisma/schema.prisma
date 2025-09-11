@@ -1,12 +1,17 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../src/db/generated/prisma"
+}
+
+generator kysely {
+  provider = "prisma-kysely"
+  output   = "../src/db"
+  fileName = "types.d.ts"
+}
+
+generator zod {
+  provider = "zod-prisma-types"
+  output   = "../src/db/generated/zod"
 }
 
 datasource db {
@@ -14,57 +19,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-generator kysely {
-  provider = "prisma-kysely"
-
-  // Optionally provide a destination directory for the generated file
-  // and a filename of your choice
-  output   = "../src/db"
-  fileName = "types.d.ts"
-}
-
 model NativeUser {
-  id            String          @id @db.VarChar(36) // UUID Length
+  id            String          @id @default(uuid()) @db.VarChar(36)
   displayName   String
-  GoogleAccount GoogleAccount[]
   createdAt     DateTime        @default(now()) @db.Timestamptz(3)
-  updatedAt     DateTime        @db.Timestamptz(3)
-  Trip          Trip[]
+  updatedAt     DateTime        @default(now()) @db.Timestamptz(3)
   File          File[]
+  GoogleAccount GoogleAccount[]
+  Trip          Trip[]
 
   @@map("users")
 }
 
 model GoogleAccount {
-  id          String     @id @db.VarChar(21) // Google Id Length
-  displayName String     @default("")
+  id          String     @id @default(uuid()) @db.VarChar(36)
   email       String     @unique
   userId      String     @db.VarChar(36)
-  user        NativeUser @relation(fields: [userId], references: [id])
   createdAt   DateTime   @default(now()) @db.Timestamptz(3)
-  updatedAt   DateTime   @db.Timestamptz(3)
+  updatedAt   DateTime   @default(now()) @db.Timestamptz(3)
+  displayName String     @default("")
+  user        NativeUser @relation(fields: [userId], references: [id])
 
   @@map("google_accounts")
 }
 
 model Trip {
-  id            String          @id @db.VarChar(36)
-  displayName   String
-  ownerId       String          @db.VarChar(36)
-  owner         NativeUser      @relation(fields: [ownerId], references: [id])
-  createdAt     DateTime        @default(now()) @db.Timestamptz(3)
-  updatedAt     DateTime        @db.Timestamptz(3)
-  TripDocuments TripDocuments[]
+  id          String     @id @default(uuid()) @db.VarChar(36)
+  displayName String     @default("")
+  ownerId     String     @db.VarChar(36)
+  createdAt   DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime   @default(now()) @db.Timestamptz(3)
+  owner       NativeUser @relation(fields: [ownerId], references: [id])
 
   @@map("trips")
 }
 
 model Activity {
-  id                String              @id @db.VarChar(36)
-  displayName       String
-  createdAt         DateTime            @default(now()) @db.Timestamptz(3)
-  updatedAt         DateTime            @db.Timestamptz(3)
-  ActivityDocuments ActivityDocuments[]
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  displayName String   @default("")
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @default(now()) @db.Timestamptz(3)
 
   @@map("activities")
 }
@@ -73,40 +67,16 @@ model Document {
   id                     String                   @id @db.VarChar(36)
   content                String
   createdAt              DateTime                 @default(now()) @db.Timestamptz(3)
-  updatedAt              DateTime                 @db.Timestamptz(3)
+  updatedAt              DateTime                 @default(now()) @db.Timestamptz(3)
   DocumentFileReferences DocumentFileReferences[]
-  TripDocuments          TripDocuments[]
-  ActivityDocuments      ActivityDocuments[]
 
   @@map("documents")
 }
 
-model ActivityDocuments {
-  documentId String @db.VarChar(36)
-  activityId String @db.VarChar(36)
-
-  trip     Activity @relation(fields: [activityId], references: [id])
-  document Document @relation(fields: [documentId], references: [id])
-
-  @@id([documentId, activityId])
-  @@map("activity_documents")
-}
-
-model TripDocuments {
-  documentId String @db.VarChar(36)
-  tripId     String @db.VarChar(36)
-
-  trip     Trip     @relation(fields: [tripId], references: [id])
-  document Document @relation(fields: [documentId], references: [id])
-
-  @@id([documentId, tripId])
-  @@map("trip_documents")
-}
-
 model DocumentFileReferences {
   documentId String   @db.VarChar(36)
-  document   Document @relation(fields: [documentId], references: [id])
   fileId     String   @db.VarChar(36)
+  document   Document @relation(fields: [documentId], references: [id])
   file       File     @relation(fields: [fileId], references: [id])
 
   @@id([documentId, fileId])
@@ -114,14 +84,26 @@ model DocumentFileReferences {
 }
 
 model File {
-  id                     String                   @id @db.VarChar(36)
-  data                   String
+  id                     String                   @id @default(uuid()) @db.VarChar(36)
+  name                   String                   @unique
+  displayName            String
+  encoding               String
+  src                    String
   type                   String
+  size                   Int
   uploaderId             String                   @db.VarChar(36)
-  uploader               NativeUser               @relation(fields: [uploaderId], references: [id])
   createdAt              DateTime                 @default(now()) @db.Timestamptz(3)
-  updatedAt              DateTime                 @db.Timestamptz(3)
+  updatedAt              DateTime                 @default(now()) @db.Timestamptz(3)
   DocumentFileReferences DocumentFileReferences[]
+  uploader               NativeUser               @relation(fields: [uploaderId], references: [id])
 
   @@map("files")
+}
+
+model user_sessions {
+  sid    String   @id(map: "session_pkey") @db.VarChar
+  sess   Json     @db.Json
+  expire DateTime @db.Timestamp(6)
+
+  @@index([expire], map: "IDX_session_expire")
 }
