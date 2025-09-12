@@ -7,7 +7,7 @@ import { editDocumentHandler } from './handlers/edit-document.handler';
 
 const router: Router = Router();
 
-router.patch('/api/v1/documents/:id/upload', authGuard(), asyncHandler(editDocumentHandler));
+router.patch('/api/v1/documents/:id', authGuard(), asyncHandler(editDocumentHandler));
 
 // File Uploads
 router.post('/api/v1/documents/:id/upload', authGuard(), upload.array('attachments'), asyncHandler(uploadFilesHandler));
