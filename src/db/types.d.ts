@@ -12,7 +12,8 @@ export type Activity = {
 };
 export type Document = {
     id: string;
-    content: string;
+    content: Generated<string>;
+    tripId: string;
     createdAt: Generated<Timestamp>;
     updatedAt: Generated<Timestamp>;
 };

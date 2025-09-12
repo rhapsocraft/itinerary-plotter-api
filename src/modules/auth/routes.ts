@@ -16,8 +16,4 @@ router.get('/auth/google/callback', passport.authenticate('google', { failureRed
 
 router.get('/auth/logout', asyncHandler(logoutHandler));
 
-router.get('/auth/test', (req, res) => {
-  res.redirect('http://localhost:3000/api/v1/maintenance/health-check');
-});
-
 export default router;

@@ -6,9 +6,9 @@ import { deleteFileByIdHandler, deleteFilesHandler } from './handlers/delete-fil
 
 const router: Router = Router();
 
-router.get('/api/v1/file', authGuard(), asyncHandler(findFilesHandler));
-router.get('/api/v1/file/:id', authGuard(), asyncHandler(findFileByIdHandler));
-router.delete('/api/v1/file', authGuard(), asyncHandler(deleteFilesHandler));
-router.delete('/api/v1/file/:id', authGuard(), asyncHandler(deleteFileByIdHandler));
+router.get('/api/v1/files', authGuard(), asyncHandler(findFilesHandler));
+router.get('/api/v1/files/:id', authGuard(), asyncHandler(findFileByIdHandler));
+router.delete('/api/v1/files', authGuard(), asyncHandler(deleteFilesHandler));
+router.delete('/api/v1/files/:id', authGuard(), asyncHandler(deleteFileByIdHandler));
 
 export default router;

@@ -1,32 +1,21 @@
-import { batchCreate, CreateFileDTO } from '@/modules/file/services/file.service';
 import { RequestHandler } from 'express';
+import { uploadDocumentFilesUseCase } from '../use-cases/upload-files.use-case';
 
 type UploadFilesResponse =
   | {
-      attachments: Partial<File>[];
+      id: string;
+      files: Partial<File>[];
     }
   | string;
 
-function fileToDTO(file: Express.Multer.File, uploaderId: string): CreateFileDTO {
-  return {
-    displayName: file.originalname,
-    name: file.filename,
-    size: file.size,
-    src: file.path,
-    type: file.mimetype,
-    uploaderId,
-  };
-}
-
-export const uploadFilesHandler: RequestHandler<any, UploadFilesResponse, any, any> = async (req, res) => {
+export const uploadFilesHandler: RequestHandler<{ id: string }, UploadFilesResponse, any, any> = async (req, res) => {
   const userId = req.user?.userId;
 
   if (userId && req.files) {
-    const fileDTOs = (req.files as Express.Multer.File[]).map((file) => fileToDTO(file, userId));
-    const files = await batchCreate(fileDTOs);
-
+    const files = await uploadDocumentFilesUseCase(req.params.id, req.files as Express.Multer.File[], userId);
     res.status(201).send({
-      attachments: files,
+      id: req.params.id,
+      files: files,
     });
   } else {
     res.status(403).send('No associated internal user');

@@ -2,55 +2,8 @@ import { db } from '@/db';
 import { FileSchema } from '@/db/generated/zod';
 import { createDTO } from '@/utils/create-dto.util';
 import z from 'zod';
-import { v4 as uuidv4 } from 'uuid';
-import { DB, File } from '@/db/types';
+import { DB } from '@/db/types';
 import { Expression, ExpressionBuilder, ExpressionOrFactory, SqlBool } from 'kysely';
-
-const { dto: createFileDTO, validator: validateCreateFileDTO } = createDTO(
-  z.object({
-    name: FileSchema.shape.name,
-    displayName: FileSchema.shape.displayName.optional(),
-    type: FileSchema.shape.type,
-    size: FileSchema.shape.size,
-    src: FileSchema.shape.src,
-    uploaderId: FileSchema.shape.uploaderId,
-  }),
-);
-
-export type CreateFileDTO = typeof createFileDTO;
-
-export async function batchCreate(fileDTOs: CreateFileDTO[]): Promise<Partial<File>[]> {
-  return await db.transaction().execute(async (trx) => {
-    const createdFiles: Partial<File>[] = [];
-
-    for (const file of fileDTOs) {
-      const { name, displayName, type, size, src, uploaderId } = await validateCreateFileDTO(file);
-
-      const createdFile = await trx
-        .insertInto('files')
-        .values({
-          id: uuidv4(),
-          displayName: displayName ?? name,
-          name,
-          type,
-          size,
-          src,
-          uploaderId,
-          updatedAt: new Date(),
-        })
-        .returning('src')
-        .executeTakeFirst();
-
-      if (!createdFile) {
-        throw new Error(`Unable to create file: ${displayName ?? name}`);
-      }
-
-      createdFiles.push(createdFile);
-    }
-
-    return createdFiles;
-  });
-}
 
 const { dto: findFilesDTO, validator: validateFindFilesDTO } = createDTO(
   z.object({

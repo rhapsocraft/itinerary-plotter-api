@@ -5,14 +5,20 @@ import { authGuard } from '@/middlewares/auth.middleware';
 import { findTripByIdHandler, findTripsHandler } from './handlers/find-trip.handler';
 import { deleteTripHandler } from './handlers/delete-trip.handler';
 import { editTripHandler } from './handlers/edit-trip.handler';
+import { createTripDocumentHandler } from './handlers/create-trip-document.handler';
+import { findTripDocumentsHandler } from './handlers/find-trip-documents.handler';
 
 const router: Router = Router();
 
-router.post('/api/v1/trip', authGuard(), asyncHandler(createTripHandler));
-router.get('/api/v1/trip', authGuard(), asyncHandler(findTripsHandler));
+router.post('/api/v1/trips', authGuard(), asyncHandler(createTripHandler));
+router.get('/api/v1/trips', authGuard(), asyncHandler(findTripsHandler));
 
-router.get('/api/v1/trip/:id', authGuard(), asyncHandler(findTripByIdHandler));
-router.patch('/api/v1/trip/:id', authGuard(), asyncHandler(editTripHandler));
-router.delete('/api/v1/trip/:id', authGuard(), asyncHandler(deleteTripHandler));
+router.get('/api/v1/trips/:id', authGuard(), asyncHandler(findTripByIdHandler));
+router.patch('/api/v1/trips/:id', authGuard(), asyncHandler(editTripHandler));
+router.delete('/api/v1/trips/:id', authGuard(), asyncHandler(deleteTripHandler));
+
+// Trip Documents
+router.post('/api/v1/trips/:id/document', authGuard(), asyncHandler(createTripDocumentHandler));
+router.get('/api/v1/trips/:id/document', authGuard(), asyncHandler(findTripDocumentsHandler));
 
 export default router;
