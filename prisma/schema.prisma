@@ -50,7 +50,9 @@ model Trip {
   createdAt   DateTime   @default(now()) @db.Timestamptz(3)
   updatedAt   DateTime   @default(now()) @db.Timestamptz(3)
   owner       NativeUser @relation(fields: [ownerId], references: [id])
+  Document    Document[]
 
+  @@index([ownerId])
   @@map("trips")
 }
 
@@ -65,11 +67,14 @@ model Activity {
 
 model Document {
   id                     String                   @id @db.VarChar(36)
-  content                String
+  content                String                   @default("")
+  tripId                 String                   @db.VarChar(36)
+  document               Trip                     @relation(fields: [tripId], references: [id])
   createdAt              DateTime                 @default(now()) @db.Timestamptz(3)
   updatedAt              DateTime                 @default(now()) @db.Timestamptz(3)
   DocumentFileReferences DocumentFileReferences[]
 
+  @@index([tripId])
   @@map("documents")
 }
 
@@ -96,6 +101,7 @@ model File {
   DocumentFileReferences DocumentFileReferences[]
   uploader               NativeUser               @relation(fields: [uploaderId], references: [id])
 
+  @@index([uploaderId])
   @@map("files")
 }
 
