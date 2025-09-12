@@ -1,0 +1,15 @@
+{
+  "version": "1",
+  "name": "itinerary_plotter_api",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "size": 0.001483917236328125,
+  "filesCount": 11,
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "{{base_url}}"
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Create Trip
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/api/v1/trips
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "displayName": "New Trip"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

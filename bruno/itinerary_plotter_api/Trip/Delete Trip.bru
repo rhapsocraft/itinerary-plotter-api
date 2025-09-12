@@ -1,0 +1,15 @@
+meta {
+  name: Delete Trip
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{base_url}}/api/v1/trips
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

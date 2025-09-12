@@ -1,0 +1,15 @@
+meta {
+  name: Edit Trip
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{base_url}}/api/v1/trips
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

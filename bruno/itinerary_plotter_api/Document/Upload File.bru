@@ -1,0 +1,20 @@
+meta {
+  name: Upload File
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/v1/documents/2860a4b8-60ba-4d8a-8653-4eb248f6c4b3/upload
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  attachments: @file(C:\Sean\assets\rhapsocraft_avatar.png)
+  attachments: @file(C:\Sean\assets\phase1_cover.png)
+}
+
+settings {
+  encodeUrl: true
+}

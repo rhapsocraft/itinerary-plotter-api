@@ -1,0 +1,15 @@
+meta {
+  name: Create Document
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/v1/documents
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

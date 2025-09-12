@@ -1,0 +1,15 @@
+meta {
+  name: Health Check
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/v1/maintenance/health-check
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

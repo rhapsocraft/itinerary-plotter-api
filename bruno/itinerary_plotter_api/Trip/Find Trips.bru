@@ -1,0 +1,15 @@
+meta {
+  name: Find Trips
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/trips
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
