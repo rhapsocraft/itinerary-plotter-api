@@ -95,8 +95,8 @@ const { dto: findTripsDTO, validator: validateFindTripsDTO } = createDTO(
 
 export type FindTripsDTO = typeof findTripsDTO;
 
-export async function find(parameters: FindTripsDTO) {
-  const { id, displayName, ownerId } = await validateFindTripsDTO(parameters);
+export async function find(params: FindTripsDTO) {
+  const { id, displayName, ownerId } = await validateFindTripsDTO(params);
 
   const trips = await db
     .selectFrom('trips')

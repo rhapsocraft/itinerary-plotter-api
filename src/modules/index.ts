@@ -4,5 +4,6 @@ import maintenanceRouter from './maintenance/routes';
 import authRouter from './auth/routes';
 import tripRouter from './trip/routes';
 import documentRouter from './document/routes';
+import fileRouter from './file/routes';
 
-export const routers: Router[] = [maintenanceRouter, authRouter, tripRouter, documentRouter];
+export const routers: Router[] = [maintenanceRouter, authRouter, tripRouter, documentRouter, fileRouter];

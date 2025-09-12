@@ -24,7 +24,6 @@ export type File = {
     id: string;
     name: string;
     displayName: string;
-    encoding: string;
     src: string;
     type: string;
     size: number;

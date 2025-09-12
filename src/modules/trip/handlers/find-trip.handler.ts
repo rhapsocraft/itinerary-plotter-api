@@ -8,18 +8,16 @@ type FindTripsRequest = {
   name: string;
 };
 
-type FindTripsResponse = Selectable<Trip>[];
+type FindTripResponse = Selectable<Trip>;
 
-type FindTripByIdResponse = Selectable<Trip>;
-
-export const findTripsHandler: RequestHandler<any, FindTripsResponse, FindTripsRequest, any> = async (req, res) => {
+export const findTripsHandler: RequestHandler<any, FindTripResponse[], FindTripsRequest, any> = async (req, res) => {
   // Find Trips visible to logged in user
   const trips = await find({ id: req.body?.id, displayName: req.body?.name, ownerId: req.user.userId });
 
   res.status(200).send(trips);
 };
 
-export const findTripByIdHandler: RequestHandler<{ id: string }, FindTripByIdResponse, any, any> = async (req, res) => {
+export const findTripByIdHandler: RequestHandler<{ id: string }, FindTripResponse, any, any> = async (req, res) => {
   const trip = await findById(req.params.id);
 
   res.status(200).send(trip);
