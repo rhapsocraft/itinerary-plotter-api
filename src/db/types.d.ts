@@ -7,6 +7,8 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 export type Activity = {
     id: string;
     displayName: Generated<string>;
+    scheduleStart: Timestamp;
+    scheduleEnd: Timestamp;
     createdAt: Generated<Timestamp>;
     updatedAt: Generated<Timestamp>;
 };

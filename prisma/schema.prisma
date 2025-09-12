@@ -57,10 +57,12 @@ model Trip {
 }
 
 model Activity {
-  id          String   @id @default(uuid()) @db.VarChar(36)
-  displayName String   @default("")
-  createdAt   DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt   DateTime @default(now()) @db.Timestamptz(3)
+  id            String   @id @default(uuid()) @db.VarChar(36)
+  displayName   String   @default("")
+  scheduleStart DateTime @db.Timestamptz(3)
+  scheduleEnd   DateTime @db.Timestamptz(3)
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime @default(now()) @db.Timestamptz(3)
 
   @@map("activities")
 }
