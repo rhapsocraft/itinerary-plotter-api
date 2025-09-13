@@ -1,0 +1,21 @@
+meta {
+  name: Add Activity
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/v1/trips/8d5fb444-cef6-4297-9d15-d95dd3810fa9/activities
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "displayName": "Activity 1"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
