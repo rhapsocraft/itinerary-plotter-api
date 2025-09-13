@@ -8,5 +8,6 @@ const router: Router = Router();
 
 // Activity Documents
 router.post('/api/v1/activities/:id/documents', authGuard(), asyncHandler(createActivityDocumentHandler));
-router.get('/api/v1/trips/:id/documents', authGuard(), asyncHandler(findActivityDocumentsHandler));
+router.get('/api/v1/activities/:id/documents', authGuard(), asyncHandler(findActivityDocumentsHandler));
+
 export default router;
