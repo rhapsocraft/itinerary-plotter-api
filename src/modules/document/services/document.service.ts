@@ -8,7 +8,8 @@ import z from 'zod';
 
 const { dto: createDocumentDTO, validator: validateCreateDocumentDTO } = createDTO(
   z.object({
-    tripId: DocumentSchema.shape.tripId,
+    tripId: DocumentSchema.shape.tripId.optional(),
+    activityId: DocumentSchema.shape.activityId.optional(),
     content: DocumentSchema.shape.content.optional(),
   }),
 );
@@ -16,13 +17,14 @@ const { dto: createDocumentDTO, validator: validateCreateDocumentDTO } = createD
 export type CreateDocumentDTO = typeof createDocumentDTO;
 
 export async function create(documentDTO: CreateDocumentDTO): Promise<Selectable<Document>> {
-  const { tripId, content } = await validateCreateDocumentDTO(documentDTO);
+  const { tripId, content, activityId } = await validateCreateDocumentDTO(documentDTO);
 
   const document = await db
     .insertInto('documents')
     .values({
       id: uuidv4(),
       tripId,
+      activityId,
       content,
       updatedAt: new Date(),
     })
@@ -40,13 +42,14 @@ const { dto: findDocumentDTO, validator: validateFindDocumentDTO } = createDTO(
   z.object({
     id: DocumentSchema.shape.id.optional(),
     tripId: DocumentSchema.shape.tripId.optional(),
+    activityId: DocumentSchema.shape.activityId.optional(),
   }),
 );
 
 export type FindDocumentDTO = typeof findDocumentDTO;
 
 export async function findAll(params: FindDocumentDTO) {
-  const { id, tripId } = await validateFindDocumentDTO(params);
+  const { id, tripId, activityId } = await validateFindDocumentDTO(params);
 
   const documents = await db
     .selectFrom('documents')
@@ -55,6 +58,7 @@ export async function findAll(params: FindDocumentDTO) {
 
       if (id) ands.push(eb('id', '=', id));
       if (tripId) ands.push(eb('tripId', '=', tripId));
+      if (activityId) ands.push(eb('activityId', '=', activityId));
 
       return eb.and(ands);
     })

@@ -1,5 +1,5 @@
 import { Document } from '@/db/types';
-import { findAll } from '@/modules/document/services/document.service';
+import { findAll as findAllDocuments } from '@/modules/document/services/document.service';
 import { RequestHandler } from 'express';
 import { Selectable } from 'kysely';
 
@@ -7,13 +7,13 @@ type FindTripDocumentsRequest = {
   id: string;
 };
 
-type FindDocumentResponse = Selectable<Document>;
+type FindTripDocumentResponse = Selectable<Document>;
 
-export const findTripDocumentsHandler: RequestHandler<{ id: string }, FindDocumentResponse[], FindTripDocumentsRequest, any> = async (
+export const findTripDocumentsHandler: RequestHandler<{ id: string }, FindTripDocumentResponse[], FindTripDocumentsRequest, any> = async (
   req,
   res,
 ) => {
-  const documents = await findAll({ id: req.body?.id, tripId: req.params.id });
+  const documents = await findAllDocuments({ id: req.body?.id, tripId: req.params.id });
 
   res.status(200).send(documents);
 };

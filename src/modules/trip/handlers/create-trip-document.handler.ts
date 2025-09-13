@@ -4,9 +4,9 @@ import { RequestHandler } from 'express';
 import { Selectable } from 'kysely';
 import { findById } from '../services/trip.service';
 
-type CreateDocumentResponse = Selectable<Document> | string;
+type CreateTripDocumentResponse = Selectable<Document> | string;
 
-export const createTripDocumentHandler: RequestHandler<{ id: string }, CreateDocumentResponse, any, any> = async (req, res) => {
+export const createTripDocumentHandler: RequestHandler<{ id: string }, CreateTripDocumentResponse, any, any> = async (req, res) => {
   const tripId = req.params.id;
   const trip = await findById(tripId);
 
