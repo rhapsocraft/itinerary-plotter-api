@@ -24,9 +24,9 @@ model NativeUser {
   displayName   String
   createdAt     DateTime        @default(now()) @db.Timestamptz(3)
   updatedAt     DateTime        @default(now()) @db.Timestamptz(3)
-  File          File[]
-  GoogleAccount GoogleAccount[]
-  Trip          Trip[]
+  files         File[]
+  googleAccount GoogleAccount[]
+  trips         Trip[]
 
   @@map("users")
 }
@@ -50,6 +50,7 @@ model Trip {
   createdAt   DateTime   @default(now()) @db.Timestamptz(3)
   updatedAt   DateTime   @default(now()) @db.Timestamptz(3)
   owner       NativeUser @relation(fields: [ownerId], references: [id])
+  activities  Activity[]
   Document    Document[]
 
   @@index([ownerId])
@@ -57,26 +58,28 @@ model Trip {
 }
 
 model Activity {
-  id            String   @id @default(uuid()) @db.VarChar(36)
-  displayName   String   @default("")
-  scheduleStart DateTime @db.Timestamptz(3)
-  scheduleEnd   DateTime @db.Timestamptz(3)
-  createdAt     DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt     DateTime @default(now()) @db.Timestamptz(3)
+  id          String     @id @default(uuid()) @db.VarChar(36)
+  displayName String     @default("")
+  tripId      String     @db.VarChar(36)
+  trip        Trip       @relation(fields: [tripId], references: [id])
+  createdAt   DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime   @default(now()) @db.Timestamptz(3)
+  Document    Document[]
 
   @@map("activities")
 }
 
 model Document {
-  id                     String                   @id @db.VarChar(36)
-  content                String                   @default("")
-  tripId                 String                   @db.VarChar(36)
-  document               Trip                     @relation(fields: [tripId], references: [id])
-  createdAt              DateTime                 @default(now()) @db.Timestamptz(3)
-  updatedAt              DateTime                 @default(now()) @db.Timestamptz(3)
-  DocumentFileReferences DocumentFileReferences[]
+  id         String                   @id @db.VarChar(36)
+  content    String                   @default("")
+  createdAt  DateTime                 @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime                 @default(now()) @db.Timestamptz(3)
+  tripId     String?                  @db.VarChar(36)
+  activityId String?                  @db.VarChar(36)
+  activity   Activity?                @relation(fields: [activityId], references: [id])
+  trip       Trip?                    @relation(fields: [tripId], references: [id])
+  references DocumentFileReferences[]
 
-  @@index([tripId])
   @@map("documents")
 }
 
@@ -91,17 +94,17 @@ model DocumentFileReferences {
 }
 
 model File {
-  id                     String                   @id @default(uuid()) @db.VarChar(36)
-  name                   String                   @unique
-  displayName            String
-  src                    String
-  type                   String
-  size                   Int
-  uploaderId             String                   @db.VarChar(36)
-  createdAt              DateTime                 @default(now()) @db.Timestamptz(3)
-  updatedAt              DateTime                 @default(now()) @db.Timestamptz(3)
-  DocumentFileReferences DocumentFileReferences[]
-  uploader               NativeUser               @relation(fields: [uploaderId], references: [id])
+  id          String                   @id @default(uuid()) @db.VarChar(36)
+  name        String                   @unique
+  displayName String
+  src         String
+  type        String
+  size        Int
+  uploaderId  String                   @db.VarChar(36)
+  createdAt   DateTime                 @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime                 @default(now()) @db.Timestamptz(3)
+  files       DocumentFileReferences[]
+  uploader    NativeUser               @relation(fields: [uploaderId], references: [id])
 
   @@index([uploaderId])
   @@map("files")

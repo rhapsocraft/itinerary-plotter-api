@@ -7,17 +7,17 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 export type Activity = {
     id: string;
     displayName: Generated<string>;
-    scheduleStart: Timestamp;
-    scheduleEnd: Timestamp;
+    tripId: string;
     createdAt: Generated<Timestamp>;
     updatedAt: Generated<Timestamp>;
 };
 export type Document = {
     id: string;
     content: Generated<string>;
-    tripId: string;
     createdAt: Generated<Timestamp>;
     updatedAt: Generated<Timestamp>;
+    tripId: string | null;
+    activityId: string | null;
 };
 export type DocumentFileReferences = {
     documentId: string;
