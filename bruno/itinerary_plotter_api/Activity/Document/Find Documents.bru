@@ -1,0 +1,15 @@
+meta {
+  name: Find Documents
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/v1/activities/33f67f08-9ca5-4e6f-9c2b-a5449bb705e4/documents
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
