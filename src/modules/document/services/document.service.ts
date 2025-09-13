@@ -54,7 +54,7 @@ export async function findAll(params: FindDocumentDTO) {
       const ands: Expression<SqlBool>[] = [];
 
       if (id) ands.push(eb('id', '=', id));
-      if (tripId) ands.push(eb('id', '=', tripId));
+      if (tripId) ands.push(eb('tripId', '=', tripId));
 
       return eb.and(ands);
     })
