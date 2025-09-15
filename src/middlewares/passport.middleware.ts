@@ -1,5 +1,5 @@
 import passport from 'passport';
-import { Strategy as GoogleStrategry } from 'passport-google-oauth20';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { env } from '@/config/environment';
 import { RequestHandler } from 'express';
 import { registerGoogleUserUseCase } from '@/modules/auth/use-cases/register-google-user.use-case';
@@ -7,7 +7,7 @@ import { findById as findGoogleAccountById } from '@/modules/user/services/googl
 
 // Initialize Google Auth passport strategy
 passport.use(
-  new GoogleStrategry(
+  new GoogleStrategy(
     {
       clientID: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
@@ -15,14 +15,13 @@ passport.use(
     },
     async function (accessToken, refreshToken, profile, cb) {
       // Here we can create user
-
       let existingAccount = await findGoogleAccountById(profile.id);
 
       if (!existingAccount) {
         existingAccount = await registerGoogleUserUseCase(profile);
       }
 
-      return cb(null, existingAccount);
+      cb(null, existingAccount);
     },
   ),
 );

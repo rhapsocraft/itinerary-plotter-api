@@ -10,11 +10,26 @@ function getMethodColor(method: string) {
   return map[method] ?? pc.gray(method);
 }
 
+function getStatusColor(statusCode: number) {
+  const firstDigit = `${statusCode}`[0];
+
+  const map: Record<string, string> = {
+    '2': pc.green(statusCode),
+    '4': pc.red(statusCode),
+    '3': pc.magenta(statusCode),
+  };
+
+  return map[firstDigit] ?? statusCode;
+}
+
 export function loggingMiddleware(): RequestHandler {
   return async (req, res, next) => {
     const start = Date.now();
 
+    res.on('finish', () => {
+      console.log(`${getMethodColor(req.method)} ${getStatusColor(res.statusCode)} ${req.path} ${pc.blue(`${Date.now() - start}ms`)}`);
+    });
+
     next();
-    console.log(`${getMethodColor(req.method)} ${req.path} ${pc.blue(`${Date.now() - start}ms`)}`);
   };
 }

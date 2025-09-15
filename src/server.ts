@@ -5,12 +5,16 @@ import { sessionMiddleware } from './middlewares/session.middleware';
 import { passportMiddleWare } from './middlewares/passport.middleware';
 import { loggingMiddleware } from './middlewares/logging.middleware';
 import pc from 'picocolors';
+import { corsMiddleware } from './middlewares/cors.middleware';
+import cookieParser from 'cookie-parser';
 
 const port = env.SERVER_PORT;
 
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
+app.use(corsMiddleware());
 app.use(sessionMiddleware());
 app.use(passportMiddleWare());
 
