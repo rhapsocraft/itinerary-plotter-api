@@ -8,6 +8,8 @@ export type Activity = {
     id: string;
     displayName: Generated<string>;
     tripId: string;
+    scheduleStart: Timestamp | null;
+    scheduleEnd: Timestamp | null;
     createdAt: Generated<Timestamp>;
     updatedAt: Generated<Timestamp>;
 };

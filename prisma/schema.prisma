@@ -58,13 +58,15 @@ model Trip {
 }
 
 model Activity {
-  id          String     @id @default(uuid()) @db.VarChar(36)
-  displayName String     @default("")
-  tripId      String     @db.VarChar(36)
-  trip        Trip       @relation(fields: [tripId], references: [id])
-  createdAt   DateTime   @default(now()) @db.Timestamptz(3)
-  updatedAt   DateTime   @default(now()) @db.Timestamptz(3)
-  Document    Document[]
+  id            String     @id @default(uuid()) @db.VarChar(36)
+  displayName   String     @default("")
+  tripId        String     @db.VarChar(36)
+  trip          Trip       @relation(fields: [tripId], references: [id])
+  scheduleStart DateTime?  @db.Timestamptz(3)
+  scheduleEnd   DateTime?  @db.Timestamptz(3)
+  createdAt     DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime   @default(now()) @db.Timestamptz(3)
+  Document      Document[]
 
   @@map("activities")
 }

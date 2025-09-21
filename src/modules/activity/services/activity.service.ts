@@ -10,6 +10,8 @@ const { dto: createActivityDTO, validator: validateCreateActivityDTO } = createD
   z.object({
     displayName: ActivitySchema.shape.displayName,
     tripId: ActivitySchema.shape.tripId,
+    scheduleAt: ActivitySchema.shape.scheduleStart,
+    scheduleEndAt: ActivitySchema.shape.scheduleEnd.optional(),
   }),
 );
 
