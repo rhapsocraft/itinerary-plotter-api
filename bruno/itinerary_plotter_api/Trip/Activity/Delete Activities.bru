@@ -1,20 +1,13 @@
 meta {
-  name: Add Activity
+  name: Delete Activities
   type: http
-  seq: 1
+  seq: 3
 }
 
-post {
+delete {
   url: {{base_url}}/api/v1/trips/52e62d4a-244e-4ddb-a4cf-14e14412cdc4/activities
-  body: json
+  body: none
   auth: inherit
-}
-
-body:json {
-  {
-    "displayName": "Activity 1",
-    "scheduleStart": "2026-01-01 6:20"
-  }
 }
 
 settings {
