@@ -64,6 +64,7 @@ export async function findAll(params: FindActivitiesDTO) {
 
       return eb.and(ands);
     })
+    .orderBy('scheduleStart', 'asc')
     .selectAll()
     .execute();
 
