@@ -6,6 +6,8 @@ import { findById } from '../services/trip.service';
 
 type CreateActivityRequest = {
   displayName: string;
+  scheduleStart: string;
+  scheduleEnd: string;
 };
 
 type CreateActivityResponse = Selectable<Activity> | string;
@@ -18,10 +20,19 @@ export const createTripActivityHandler: RequestHandler<{ id: string }, CreateAct
   const trip = await findById(tripId);
 
   if (trip) {
-    const { displayName } = req.body;
-    const createdActivity = await createActivity({ displayName, tripId });
+    if (trip.ownerId === req.user?.userId) {
+      const { displayName, scheduleStart, scheduleEnd } = req.body;
+      const createdActivity = await createActivity({
+        displayName,
+        tripId,
+        scheduleStart: new Date(scheduleStart),
+        ...(scheduleEnd && { scheduleEnd: new Date(scheduleEnd) }),
+      });
 
-    res.status(201).send(createdActivity);
+      res.status(201).send(createdActivity);
+    } else {
+      res.status(403).send('Unauthorized operation');
+    }
   } else {
     res.status(404).send(`Trip ${tripId} not found`);
   }

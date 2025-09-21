@@ -9,6 +9,7 @@ import { createTripDocumentHandler } from './handlers/create-trip-document.handl
 import { findTripDocumentsHandler } from './handlers/find-trip-documents.handler';
 import { createTripActivityHandler } from './handlers/create-trip-activity.handler';
 import { findTripActivitiesHandler } from './handlers/find-trip-activities.handler';
+import { deleteTripActivitiesHandler } from './handlers/delete-trip-activities.handler';
 
 const router: Router = Router();
 
@@ -26,5 +27,6 @@ router.get('/api/v1/trips/:id/documents', authGuard(), asyncHandler(findTripDocu
 // Trip Activities
 router.post('/api/v1/trips/:id/activities', authGuard(), asyncHandler(createTripActivityHandler));
 router.get('/api/v1/trips/:id/activities', authGuard(), asyncHandler(findTripActivitiesHandler));
+router.delete('/api/v1/trips/:id/activities', authGuard(), asyncHandler(deleteTripActivitiesHandler));
 
 export default router;

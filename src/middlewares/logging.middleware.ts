@@ -5,6 +5,7 @@ function getMethodColor(method: string) {
   const map: Record<string, string> = {
     GET: pc.green(method),
     POST: pc.magenta(method),
+    DELETE: pc.red(method),
   };
 
   return map[method] ?? pc.gray(method);
