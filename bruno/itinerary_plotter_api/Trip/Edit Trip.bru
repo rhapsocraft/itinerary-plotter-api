@@ -5,9 +5,15 @@ meta {
 }
 
 patch {
-  url: {{base_url}}/api/v1/trips
-  body: none
+  url: {{base_url}}/api/v1/trips/52e62d4a-244e-4ddb-a4cf-14e14412cdc4
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "centralLocation": {"geometry":{"location":{"lat":22.3193039,"lng":114.1693611},"viewport":{"south":22.1435,"west":113.8259001,"north":22.5619485,"east":114.4528999}},"name":"Hong Kong","place_id":"ChIJD5gyo-3iAzQRfMnq27qzivA","html_attributions":[]}
+  }
 }
 
 settings {
