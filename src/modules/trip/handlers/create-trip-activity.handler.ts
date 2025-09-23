@@ -6,8 +6,10 @@ import { findById } from '../services/trip.service';
 
 type CreateActivityRequest = {
   displayName: string;
+  description: string;
   scheduleStart: string;
   scheduleEnd: string;
+  locations: string;
 };
 
 type CreateActivityResponse = Selectable<Activity> | string;
@@ -21,9 +23,11 @@ export const createTripActivityHandler: RequestHandler<{ id: string }, CreateAct
 
   if (trip) {
     if (trip.ownerId === req.user?.userId) {
-      const { displayName, scheduleStart, scheduleEnd } = req.body;
+      const { displayName, description, locations, scheduleStart, scheduleEnd } = req.body;
       const createdActivity = await createActivity({
         displayName,
+        description,
+        ...(locations && { locations: JSON.parse(locations) }),
         tripId,
         scheduleStart: new Date(scheduleStart),
         ...(scheduleEnd && { scheduleEnd: new Date(scheduleEnd) }),

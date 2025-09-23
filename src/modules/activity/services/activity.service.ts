@@ -10,7 +10,7 @@ import { GoogleMapsPlace } from '@/db/custom/place.schema';
 const { dto: createActivityDTO, validator: validateCreateActivityDTO } = createDTO(
   z.object({
     displayName: ActivitySchema.shape.displayName,
-    description: ActivitySchema.shape.description,
+    description: ActivitySchema.shape.description.optional(),
     tripId: ActivitySchema.shape.tripId,
     scheduleStart: ActivitySchema.shape.scheduleStart,
     scheduleEnd: ActivitySchema.shape.scheduleEnd.optional(),
@@ -21,15 +21,17 @@ const { dto: createActivityDTO, validator: validateCreateActivityDTO } = createD
 export type CreateActivityDTO = typeof createActivityDTO;
 
 export async function create(activityDTO: CreateActivityDTO): Promise<Selectable<Activity>> {
-  const { displayName, tripId, scheduleStart, scheduleEnd } = await validateCreateActivityDTO(activityDTO);
+  const { displayName, description, locations, tripId, scheduleStart, scheduleEnd } = await validateCreateActivityDTO(activityDTO);
 
   const activity = await db
     .insertInto('activities')
     .values({
       id: uuidv4(),
       displayName,
+      description,
       scheduleStart,
       scheduleEnd,
+      locations,
       tripId,
       updatedAt: new Date(),
     })

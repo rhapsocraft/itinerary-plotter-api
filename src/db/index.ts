@@ -1,5 +1,5 @@
 import pg from 'pg';
-import { Kysely, PostgresDialect } from 'kysely';
+import { Kysely, PostgresDialect, ParseJSONResultsPlugin } from 'kysely';
 import type { DB } from './types.js';
 import { env } from '@/config/environment.js';
 
@@ -9,4 +9,5 @@ export const db = new Kysely<DB>({
       connectionString: env.DATABASE_URL,
     }),
   }),
+  plugins: [new ParseJSONResultsPlugin()],
 });

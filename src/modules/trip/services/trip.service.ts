@@ -5,24 +5,27 @@ import { createDTO } from '@/utils/create-dto.util';
 import { Trip } from '@/db/types';
 import { Expression, Selectable, SqlBool } from 'kysely';
 import { TripSchema } from '@/db/generated/zod';
+import { GoogleMapsPlace } from '@/db/custom/place.schema';
 
 const { dto: createTripDTO, validator: validateCreateTripDTO } = createDTO(
   z.object({
     displayName: TripSchema.shape.displayName,
     ownerId: TripSchema.shape.ownerId,
+    centralLocation: GoogleMapsPlace.optional(),
   }),
 );
 
 export type CreateTripDTO = typeof createTripDTO;
 
 export async function create(tripDTO: CreateTripDTO): Promise<Selectable<Trip>> {
-  const { displayName, ownerId } = await validateCreateTripDTO(tripDTO);
+  const { displayName, ownerId, centralLocation } = await validateCreateTripDTO(tripDTO);
 
   const trip = await db
     .insertInto('trips')
     .values({
       id: uuidv4(),
       displayName,
+      centralLocation: centralLocation ? JSON.stringify(centralLocation) : undefined,
       ownerId,
       updatedAt: new Date(),
     })
@@ -60,20 +63,23 @@ const { dto: editTripDTO, validator: validateEditTripDTO } = createDTO(
   z.object({
     displayName: TripSchema.shape.displayName.optional(),
     ownerId: TripSchema.shape.ownerId.optional(),
+    centralLocation: GoogleMapsPlace.optional(),
   }),
 );
 
 export type EditTripDTO = typeof editTripDTO;
 
 export async function editById(id: string, editDto: EditTripDTO) {
-  const { displayName, ownerId } = await validateEditTripDTO(editDto);
+  const { displayName, ownerId, centralLocation } = await validateEditTripDTO(editDto);
 
   const trip = await db
     .updateTable('trips')
     .where('id', '=', id)
     .set({
       displayName,
+      centralLocation: centralLocation ? JSON.stringify(centralLocation) : undefined,
       ownerId,
+      updatedAt: new Date(),
     })
     .returningAll()
     .executeTakeFirst();
