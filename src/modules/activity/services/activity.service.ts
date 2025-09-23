@@ -5,13 +5,16 @@ import { createDTO } from '@/utils/create-dto.util';
 import { Expression, Selectable, SqlBool } from 'kysely';
 import z from 'zod';
 import { v4 as uuidv4 } from 'uuid';
+import { GoogleMapsPlace } from '@/db/custom/place.schema';
 
 const { dto: createActivityDTO, validator: validateCreateActivityDTO } = createDTO(
   z.object({
     displayName: ActivitySchema.shape.displayName,
+    description: ActivitySchema.shape.description,
     tripId: ActivitySchema.shape.tripId,
     scheduleStart: ActivitySchema.shape.scheduleStart,
     scheduleEnd: ActivitySchema.shape.scheduleEnd.optional(),
+    locations: z.array(GoogleMapsPlace).optional(),
   }),
 );
 

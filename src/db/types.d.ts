@@ -7,9 +7,11 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 export type Activity = {
     id: string;
     displayName: Generated<string>;
+    description: Generated<string>;
     tripId: string;
     scheduleStart: Timestamp | null;
     scheduleEnd: Timestamp | null;
+    locations: Generated<unknown>;
     createdAt: Generated<Timestamp>;
     updatedAt: Generated<Timestamp>;
 };
@@ -54,6 +56,7 @@ export type Trip = {
     id: string;
     displayName: Generated<string>;
     ownerId: string;
+    centralLocation: Generated<unknown>;
     createdAt: Generated<Timestamp>;
     updatedAt: Generated<Timestamp>;
 };
