@@ -1,13 +1,22 @@
 meta {
   name: Edit Activity
   type: http
-  seq: 3
+  seq: 4
 }
 
 patch {
-  url: {{base_url}}/api/v1/activities
-  body: none
+  url: {{base_url}}/api/v1/trips/52e62d4a-244e-4ddb-a4cf-14e14412cdc4/activities/a181a17a-beaf-469b-a6db-b81b81f419fc
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "locations": [
+      {"geometry":{"location":{"lat":22.3010111,"lng":114.177655},"viewport":{"south":22.29996262010728,"west":114.1765648701073,"north":22.30266227989273,"east":114.1792645298927}},"name":"Hong Kong Science Museum","place_id":"ChIJU21e7NwBBDQRjaysmmGiv-4","html_attributions":[]},
+      {"geometry":{"location":{"lat":22.2994901,"lng":114.1735972},"viewport":{"south":22.29812792010728,"west":114.1722017701073,"north":22.30082757989272,"east":114.1749014298927}},"name":"Hashtag B Tsim Sha Tsui Store","place_id":"ChIJE_6te7YBBDQRkcJ49N5A_O8","html_attributions":[]}
+    ]
+  }
 }
 
 settings {
