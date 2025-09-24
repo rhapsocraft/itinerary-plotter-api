@@ -66,7 +66,7 @@ model Activity {
   trip          Trip       @relation(fields: [tripId], references: [id])
   scheduleStart DateTime?  @db.Timestamptz(3)
   scheduleEnd   DateTime?  @db.Timestamptz(3)
-  locations     Json       @default("{}")
+  locations     Json       @default("[]")
   createdAt     DateTime   @default(now()) @db.Timestamptz(3)
   updatedAt     DateTime   @default(now()) @db.Timestamptz(3)
   Document      Document[]

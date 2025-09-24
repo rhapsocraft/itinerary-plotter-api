@@ -1,5 +1,5 @@
 import { db } from '@/db';
-import { ActivitySchema } from '@/db/generated/zod';
+import { ActivitySchema, NativeUserSchema } from '@/db/generated/zod';
 import { Activity } from '@/db/types';
 import { createDTO } from '@/utils/create-dto.util';
 import { Expression, Selectable, SqlBool } from 'kysely';
@@ -78,6 +78,56 @@ export async function findAll(params: FindActivitiesDTO) {
 
 export async function findById(id: string) {
   const activity = await db.selectFrom('activities').where('id', '=', id).selectAll().executeTakeFirst();
+
+  if (!activity) {
+    throw new Error(`Activity ${id} not found`);
+  }
+
+  return activity;
+}
+
+const { dto: editActivityDTO, validator: validateEditActivity } = createDTO(
+  z.object({
+    displayName: ActivitySchema.shape.displayName.optional(),
+    description: ActivitySchema.shape.description.optional(),
+    tripId: ActivitySchema.shape.tripId.optional(),
+    scheduleStart: ActivitySchema.shape.scheduleStart.optional(),
+    scheduleEnd: ActivitySchema.shape.scheduleEnd.optional(),
+    locations: z.array(GoogleMapsPlace).optional(),
+    userId: NativeUserSchema.shape.id.optional(),
+  }),
+);
+
+export type EditActivityDTO = typeof editActivityDTO;
+
+export async function editById(id: string, editDto: EditActivityDTO) {
+  const { displayName, description, tripId, scheduleStart, scheduleEnd, locations, userId } = await validateEditActivity(editDto);
+
+  const activity = await db
+    .updateTable('activities')
+    .from('trips')
+    .where((eb) => {
+      const ands: Expression<SqlBool>[] = [];
+
+      if (id) ands.push(eb('activities.id', '=', id));
+      if (userId) {
+        ands.push(eb('activities.tripId', '=', eb.ref('trips.id')));
+        ands.push(eb('trips.ownerId', '=', userId));
+      }
+
+      return eb.and(ands);
+    })
+    .set({
+      displayName,
+      description,
+      tripId,
+      scheduleStart,
+      scheduleEnd,
+      ...(locations && { locations: JSON.stringify(locations) }),
+      updatedAt: new Date(),
+    })
+    .returningAll('activities')
+    .executeTakeFirst();
 
   if (!activity) {
     throw new Error(`Activity ${id} not found`);
